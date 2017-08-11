@@ -12,18 +12,19 @@ const rules = [
 const plugins = [
   new webpack.DefinePlugin({
     'process.env': {
-      'NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+      NODE_ENV: JSON.stringify(process.env.NODE_ENV)
     }
   }),
   new webpack.optimize.CommonsChunkPlugin({
     name: 'vendor',
-    minChunks: (module) => module.context && /node_modules/.test(module.context)
+    minChunks: module => module.context && /node_modules/.test(module.context)
   })
 ];
 
 if (process.env.NODE_ENV === 'production') {
   rules.push({
-    test: /\.ts$/, loaders: ['@ngtools/webpack']
+    test: /\.ts$/,
+    loaders: ['@ngtools/webpack']
   });
   plugins.push(
     new AotPlugin({
@@ -59,12 +60,17 @@ if (process.env.NODE_ENV === 'production') {
   rules.push({
     test: /\.ts$/,
     loaders: [
-      'awesome-typescript-loader', 'angular-router-loader', 'angular2-template-loader'
+      'awesome-typescript-loader',
+      'angular-router-loader',
+      'angular2-template-loader'
     ]
   });
   plugins.push(
     new webpack.NamedModulesPlugin(),
-    new webpack.ContextReplacementPlugin(/angular(\\|\/)core(\\|\/)@angular/, path.resolve(__dirname, './notfound'))
+    new webpack.ContextReplacementPlugin(
+      /angular(\\|\/)core(\\|\/)@angular/,
+      path.resolve(__dirname, './notfound')
+    )
   );
 }
 
@@ -86,7 +92,7 @@ module.exports = {
       warnings: false
     },
     publicPath: '/build/',
-    port: 3000
+    port: 4500
   },
   devtool: 'sourcemap',
   entry: {
@@ -110,10 +116,7 @@ module.exports = {
   },
   resolve: {
     extensions: ['.ts', '.js'],
-    modules: [
-      'src',
-      'node_modules'
-    ]
+    modules: ['src', 'node_modules']
   },
   plugins
 };
